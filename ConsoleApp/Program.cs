@@ -70,10 +70,19 @@ namespace ConsoleApp
             TraceResult traceResult = tracer.GetTraceResult();
             string xml = xmlTracerSerializer.Serealize(traceResult);
             string json = jsonTracerSerializer.Serealize(traceResult);
-            Console.WriteLine(xml);
-            Console.WriteLine(json);
-            File.WriteAllText("trace.json", json);
-            File.WriteAllText("trace.xml", xml);
+            //Console.WriteLine(xml);
+            //Console.WriteLine(json);
+            //File.WriteAllText("trace.json", json);
+            //File.WriteAllText("trace.xml", xml);
+
+            FilePrinter fp = new FilePrinter("trace.json");
+            fp.Print(xml);
+            fp.Print(json);
+
+            ConsolePrinter cp = new ConsolePrinter();
+            cp.Print(xml);
+            cp.Print(json);
+
             Console.ReadKey();
         }
     }

@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace TracerLib
 {
     public class TraceResult
     {
-        public TraceResult(List<ThreadInfo> threadsInfo)
+        public TraceResult(ConcurrentDictionary<int, ThreadInfo> threadsInfo)
         {
             ThreadsInfo = new List<ThreadInfo>();
-            ThreadsInfo = threadsInfo;
+            ThreadsInfo.AddRange(threadsInfo.Values);
         }
 
         public List<ThreadInfo> ThreadsInfo { get; private set; }

@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsolePrinter.cs" />
+    <Compile Include="FilePrinter.cs" />
+    <Compile Include="IPrinter.cs" />
     <Compile Include="ITracer.cs" />
     <Compile Include="ITracerSerializer.cs" />
     <Compile Include="JsonTracerSerializer.cs" />

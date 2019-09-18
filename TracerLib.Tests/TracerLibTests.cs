@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TracerLib.Tests
 {
@@ -11,7 +10,7 @@ namespace TracerLib.Tests
 
         public Tracer Tracer = new Tracer();
 
-        List<Thread> Threads = new List<Thread>();
+        private readonly List<Thread> Threads = new List<Thread>();
 
         int ThreadsCount = 5;
         int MethodsCount = 5;
@@ -22,22 +21,6 @@ namespace TracerLib.Tests
         {
             Tracer.StartTrace();
             Thread.Sleep(MillisecondsTimeout);
-            Tracer.StopTrace();
-        }
-
-        private void Method1()
-        {
-            Tracer.StartTrace();
-            for (int i = 0; i < ThreadsCount; i++)
-            {
-                Threads.Add(new Thread(Method));
-            }
-
-            foreach (Thread thread in Threads)
-            {
-                thread.Start();
-                thread.Join();
-            }
             Tracer.StopTrace();
         }
 

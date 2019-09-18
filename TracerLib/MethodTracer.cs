@@ -9,15 +9,11 @@ namespace TracerLib
         {
             Stopwatch = new Stopwatch();
             ChildMethods = new List<MethodInfo>();
-            StackTrace stackTrace = new StackTrace();
-            Name = stackTrace.GetFrame(3).GetMethod().Name;
         }
-
-        public string Name;
 
         private readonly Stopwatch Stopwatch;
 
-        public List<MethodInfo> ChildMethods;
+        private readonly List<MethodInfo> ChildMethods;
 
         public void AddChildMethod(MethodInfo childMethod)
         {

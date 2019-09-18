@@ -14,11 +14,11 @@ namespace TracerLib
 
         public int TracedThreadId { get; private set; }
 
-        private Stack<MethodTracer> MethodTracers;
+        private readonly Stack<MethodTracer> MethodTracers;
 
         private MethodTracer CurrentMethodTracer;
 
-        private List<MethodInfo> MethodInfoList;
+        private readonly List<MethodInfo> MethodInfoList;
 
         public List<MethodInfo> GetThreadMethodList()
         {

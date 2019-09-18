@@ -14,6 +14,9 @@ namespace TracerLib
         private readonly List<ThreadTracer> ThreadTracers;
 
         private readonly List<ThreadInfo> ThreadsInfo;
+
+        static object Locker = new object();
+
         public TraceResult GetTraceResult()
         {
             return new TraceResult(ThreadsInfo);
@@ -21,11 +24,14 @@ namespace TracerLib
 
         private ThreadInfo GetThreadInfoById(int threadId)
         {
-            foreach (ThreadInfo threadInfo in ThreadsInfo)
+            lock (Locker)
             {
-                if (threadId == threadInfo.Id)
+                foreach (ThreadInfo threadInfo in ThreadsInfo)
                 {
-                    return threadInfo;
+                    if (threadId == threadInfo.Id)
+                    {
+                        return threadInfo;
+                    }
                 }
             }
             return null;
@@ -34,13 +40,16 @@ namespace TracerLib
         private ThreadTracer GetCurrentThreadTracer()
         {
             int threadId = Thread.CurrentThread.ManagedThreadId;
-            foreach (ThreadTracer threadTracer in ThreadTracers)
+            lock (Locker)
             {
-                if (threadId == threadTracer.TracedThreadId)
+                foreach (ThreadTracer threadTracer in ThreadTracers)
                 {
-                    return threadTracer;
+                    if (threadId == threadTracer.TracedThreadId)
+                    {
+                        return threadTracer;
+                    }
                 }
-            }
+            }            
             return null;
         }
 
@@ -51,7 +60,11 @@ namespace TracerLib
             {
                 int currentThreadId = Thread.CurrentThread.ManagedThreadId;
                 threadTracer = new ThreadTracer(currentThreadId);
-                ThreadTracers.Add(threadTracer);
+                lock (Locker)
+                {
+                    ThreadTracers.Add(threadTracer);
+                }
+                
             }
             threadTracer.StartTrace();
         }
@@ -66,7 +79,10 @@ namespace TracerLib
             {
                 List<MethodInfo> threadMethodInfos = threadTracer.GetThreadMethodList();
                 threadInfo = new ThreadInfo(currentThreadId, threadMethodInfos);
-                ThreadsInfo.Add(threadInfo);
+                lock (Locker)
+                {
+                    ThreadsInfo.Add(threadInfo);
+                }
             }
         }
     }

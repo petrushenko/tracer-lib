@@ -56,6 +56,7 @@ namespace TracerLib
             else
             {
                 MethodInfoList.Add(methodInfo);
+                CurrentMethodTracer = null;
             }
         }
     }

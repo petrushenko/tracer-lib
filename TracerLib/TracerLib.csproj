@@ -48,7 +48,6 @@
     <Compile Include="ITracer.cs" />
     <Compile Include="ITracerSerializer.cs" />
     <Compile Include="JsonTracerSerializer.cs" />
-    <Compile Include="List.cs" />
     <Compile Include="MethodInfo.cs" />
     <Compile Include="MethodTracer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

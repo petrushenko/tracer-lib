@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
-using System.Collections.Generic;
 
 namespace TracerLib
 {
@@ -61,7 +60,7 @@ namespace TracerLib
             foreach (MethodInfo method in threadInfo.Methods)
             {
                 JObject methodJObject = GetMethodJObjectWithChildMethods(method);
-                
+
                 methodJArray.Add(methodJObject);
             }
             return new JObject

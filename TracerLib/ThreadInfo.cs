@@ -14,13 +14,29 @@ namespace TracerLib
         public int Id { get; private set; }
 
         private double executionTime;
+
+        private double SummMethodsExecutionTime(MethodInfo methodInfo)
+        {
+            double time = 0;
+            time += methodInfo.ExecutionTime;
+            foreach (MethodInfo method in methodInfo.ChildMethods)
+            {
+                if (method.ChildMethods.Count > 0)
+                {
+                    time += SummMethodsExecutionTime(method);
+                }
+                time += method.ExecutionTime;
+            }
+            return time;
+        }
+
         public double ExecutionTime
         {
             get
             {
-                foreach (MethodInfo method in Methods)
+                if (Methods.Count > 0)
                 {
-                    executionTime += method.ExecutionTime;
+                    executionTime = SummMethodsExecutionTime(Methods[0]);
                 }
                 return executionTime;
             }

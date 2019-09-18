@@ -5,14 +5,11 @@ namespace TracerLib
 {
     public class ThreadTracer
     {
-        public ThreadTracer(int threadId)
+        public ThreadTracer()
         {
-            TracedThreadId = threadId;
             MethodTracers = new Stack<MethodTracer>();
             MethodInfoList = new List<MethodInfo>();
         }
-
-        public int TracedThreadId { get; private set; }
 
         private readonly Stack<MethodTracer> MethodTracers;
 

@@ -42,7 +42,7 @@ namespace TracerLib
             if (threadTracer == null)
             {
                 int currentThreadId = Thread.CurrentThread.ManagedThreadId;
-                threadTracer = new ThreadTracer(currentThreadId);       
+                threadTracer = new ThreadTracer();       
                 ThreadTracers.TryAdd(currentThreadId, threadTracer);
                 
             }

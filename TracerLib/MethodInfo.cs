@@ -21,8 +21,7 @@ namespace TracerLib
             Name = name;
             ClassName = className;
             ExecutionTime = executionTime;
-            ChildMethods = new List<MethodInfo>();
-            ChildMethods = childMethods;
+            ChildMethods = new List<MethodInfo>(childMethods);
         }
     }
 }

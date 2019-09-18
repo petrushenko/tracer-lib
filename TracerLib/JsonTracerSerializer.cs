@@ -32,11 +32,27 @@ namespace TracerLib
         {
             return new JObject
             {
-                {"name", JToken.FromObject(methodInfo.Name) },
-                {"class", JToken.FromObject(methodInfo.ClassName) },
-                {"time", JToken.FromObject(methodInfo.ExecutionTime) },
-                {"methods", new JArray(JToken.FromObject(methodInfo.ChildMethods)) }
+                {"name", methodInfo.Name },
+                {"class", methodInfo.ClassName },
+                {"time", methodInfo.ExecutionTime },
             };
+        }
+
+        private JObject GetMethodJObjectWithChildMethods(MethodInfo methodInfo)
+        {
+            JObject methodJObject = GetMethodJObject(methodInfo);
+            JArray methodsJArray = new JArray();
+            foreach (MethodInfo method in methodInfo.ChildMethods)
+            {
+                JObject childMethodJObject = GetMethodJObject(method);
+                if (method.ChildMethods.Count > 0)
+                {
+                    childMethodJObject = GetMethodJObjectWithChildMethods(method);
+                }
+                methodsJArray.Add(childMethodJObject);
+            }
+            methodJObject.Add("methods", methodsJArray);
+            return methodJObject;
         }
 
         private JObject GetThreadJObject(ThreadInfo threadInfo)
@@ -44,7 +60,8 @@ namespace TracerLib
             JArray methodJArray = new JArray();
             foreach (MethodInfo method in threadInfo.Methods)
             {
-                JObject methodJObject = GetMethodJObject(method);
+                JObject methodJObject = GetMethodJObjectWithChildMethods(method);
+                
                 methodJArray.Add(methodJObject);
             }
             return new JObject

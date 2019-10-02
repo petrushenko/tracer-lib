@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using TracerLib;
+using Tracer;
 
 namespace ConsoleApp
 {
@@ -42,13 +37,15 @@ namespace ConsoleApp
             public void InnerMethod()
             {
                 _tracer.StartTrace();
+
+                Thread.Sleep(100);
                 _tracer.StopTrace();
             }
         }
 
         public void Method(object o)
         {
-            Tracer tracer = (Tracer)o;
+            Tracer.Tracer tracer = (Tracer.Tracer)o;
             tracer.StartTrace();
             Thread.Sleep(100);
             tracer.StopTrace();
@@ -59,25 +56,21 @@ namespace ConsoleApp
             Program program = new Program();
             Thread thread = new Thread(new ParameterizedThreadStart(program.Method));
 
-            Tracer tracer = new Tracer();
+            ITracer tracer = new Tracer.Tracer();
             Foo foo = new Foo(tracer);
             foo.MyMethod();
             thread.Start(tracer);
             thread.Join();
 
-            XmlTracerSerializer xmlTracerSerializer = new XmlTracerSerializer();
+            XmlSerializer xmlTracerSerializer = new XmlSerializer();
             JsonTracerSerializer jsonTracerSerializer = new JsonTracerSerializer();
             TraceResult traceResult = tracer.GetTraceResult();
-            string xml = xmlTracerSerializer.Serealize(traceResult);
-            string json = jsonTracerSerializer.Serealize(traceResult);
-            //Console.WriteLine(xml);
-            //Console.WriteLine(json);
-            //File.WriteAllText("trace.json", json);
-            //File.WriteAllText("trace.xml", xml);
+            string xml = xmlTracerSerializer.Serialize(traceResult);
+            string json = jsonTracerSerializer.Serialize(traceResult);
 
-            FilePrinter fp = new FilePrinter("trace.json");
-            fp.Print(xml);
-            fp.Print(json);
+            FileSaver fs = new FileSaver("trace.json");
+            fs.Print(xml);
+            fs.Print(json);
 
             ConsolePrinter cp = new ConsolePrinter();
             cp.Print(xml);

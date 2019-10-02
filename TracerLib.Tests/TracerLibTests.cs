@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Threading;
+using Tracer;
 
 namespace TracerLib.Tests
 {
@@ -10,7 +11,7 @@ namespace TracerLib.Tests
 
         public Tracer Tracer = new Tracer();
 
-        private readonly List<Thread> Threads = new List<Thread>();
+        private readonly List<Thread> _threads = new List<Thread>();
 
         int ThreadsCount = 5;
         int MethodsCount = 5;
@@ -40,10 +41,10 @@ namespace TracerLib.Tests
         {
             for (int i = 0; i < ThreadsCount; i++)
             {
-                Threads.Add(new Thread(Method));
+                _threads.Add(new Thread(Method));
             }
 
-            foreach (Thread thread in Threads)
+            foreach (Thread thread in _threads)
             {
                 thread.Start();
                 thread.Join();
@@ -63,23 +64,6 @@ namespace TracerLib.Tests
 
             TraceResult traceResult = Tracer.GetTraceResult();
             Assert.AreEqual(MethodsCount, traceResult.ThreadsInfo[0].Methods.Count);
-        }
-
-        [TestMethod]
-        public void ThreadsInMethod()
-        {
-            //creates {ThreadsCount} threads
-            for (int i = 0; i < ThreadsCount; i++)
-            {
-                Threads.Add(new Thread(Method));
-            }
-            foreach (Thread thread in Threads)
-            {
-                thread.Start();
-                thread.Join();
-            }
-            TraceResult traceResult = Tracer.GetTraceResult();
-            Assert.AreEqual(ThreadsCount, traceResult.ThreadsInfo.Count);
         }
 
         [TestMethod]

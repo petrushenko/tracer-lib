@@ -5,10 +5,9 @@ namespace TracerLib
 {
     public class TraceResult
     {
-        public TraceResult(ConcurrentDictionary<int, ThreadInfo> threadsInfo)
+        public TraceResult(List<ThreadInfo> threadsInfo)
         {
-            ThreadsInfo = new List<ThreadInfo>();
-            ThreadsInfo.AddRange(threadsInfo.Values);
+            ThreadsInfo = threadsInfo;
         }
 
         public List<ThreadInfo> ThreadsInfo { get; private set; }

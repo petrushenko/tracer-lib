@@ -26,7 +26,7 @@ namespace TracerLib
         {
             if (CurrentMethodTracer != null)
             {
-                CurrentMethodTracer.StopTrace();
+                //CurrentMethodTracer.StopTrace();
                 MethodTracers.Push(CurrentMethodTracer);
             }
             CurrentMethodTracer = new MethodTracer();
@@ -42,13 +42,11 @@ namespace TracerLib
             string className = stackTrace.GetFrame(2).GetMethod().ReflectedType.Name;
             double methodExecutionTime = CurrentMethodTracer.GetExecutionTime();
             List<MethodInfo> methodInfos = CurrentMethodTracer.GetChildMethods();
-            //List<MethodInfo> methodInfos = CurrentMethodTracer.ChildMethods;
             MethodInfo methodInfo = new MethodInfo(methodName, className, methodExecutionTime, methodInfos);
             if (MethodTracers.Count > 0)
             {
                 CurrentMethodTracer = MethodTracers.Pop();
                 CurrentMethodTracer.AddChildMethod(methodInfo);
-                //CurrentMethodTracer.ChildMethods.Add(methodInfo);
             }
             else
             {

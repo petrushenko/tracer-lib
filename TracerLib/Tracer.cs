@@ -9,23 +9,18 @@ namespace TracerLib
         public Tracer()
         {
             ThreadTracers = new ConcurrentDictionary<int, ThreadTracer>();
-            ThreadsInfo = new ConcurrentDictionary<int, ThreadInfo>();
         }
 
         private readonly ConcurrentDictionary<int, ThreadTracer> ThreadTracers;
 
-        private readonly ConcurrentDictionary<int, ThreadInfo> ThreadsInfo;
-
         public TraceResult GetTraceResult()
         {
-            return new TraceResult(ThreadsInfo);
-        }
-
-        private ThreadInfo GetThreadInfoById(int threadId)
-        {
-            ThreadInfo threadInfo;
-            ThreadsInfo.TryGetValue(threadId, out threadInfo);      
-            return threadInfo;
+            var threadsInfo = new List<ThreadInfo>();
+            foreach (var thread in ThreadTracers)
+            {
+                threadsInfo.Add(new ThreadInfo(thread.Key, thread.Value.GetThreadMethodList()));
+            }
+            return new TraceResult(threadsInfo);
         }
 
         private ThreadTracer GetCurrentThreadTracer()
@@ -53,14 +48,6 @@ namespace TracerLib
         {
             ThreadTracer threadTracer = GetCurrentThreadTracer();
             threadTracer.StopTrace();
-            int currentThreadId = Thread.CurrentThread.ManagedThreadId;
-            ThreadInfo threadInfo = GetThreadInfoById(currentThreadId);
-            if (threadInfo == null)
-            {
-                List<MethodInfo> threadMethodInfos = threadTracer.GetThreadMethodList();
-                threadInfo = new ThreadInfo(currentThreadId, threadMethodInfos);
-                ThreadsInfo.TryAdd(currentThreadId, threadInfo);
-            }
         }
     }
 }

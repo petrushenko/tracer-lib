@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Xml.Serialization;
 using TracerLib;
 
 namespace ConsoleApp

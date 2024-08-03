@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
-using Tracer;
+using System.Xml.Serialization;
+using TracerLib;
 
 namespace ConsoleApp
 {
@@ -45,7 +46,7 @@ namespace ConsoleApp
 
         public void Method(object o)
         {
-            Tracer.Tracer tracer = (Tracer.Tracer)o;
+            Tracer tracer = (Tracer)o;
             tracer.StartTrace();
             Thread.Sleep(100);
             tracer.StopTrace();
@@ -56,19 +57,19 @@ namespace ConsoleApp
             Program program = new Program();
             Thread thread = new Thread(new ParameterizedThreadStart(program.Method));
 
-            ITracer tracer = new Tracer.Tracer();
+            ITracer tracer = new Tracer();
             Foo foo = new Foo(tracer);
             foo.MyMethod();
             thread.Start(tracer);
             thread.Join();
 
-            XmlSerializer xmlTracerSerializer = new XmlSerializer();
-            JsonTracerSerializer jsonTracerSerializer = new JsonTracerSerializer();
+            var xmlTracerSerializer = new XmlTracerSerializer();
+            var jsonTracerSerializer = new JsonTracerSerializer();
             TraceResult traceResult = tracer.GetTraceResult();
-            string xml = xmlTracerSerializer.Serialize(traceResult);
-            string json = jsonTracerSerializer.Serialize(traceResult);
+            var xml = xmlTracerSerializer.Serealize(traceResult);
+            var json = jsonTracerSerializer.Serealize(traceResult);
 
-            FileSaver fs = new FileSaver("trace.json");
+            var fs = new FilePrinter("trace.json");
             fs.Print(xml);
             fs.Print(json);
 
